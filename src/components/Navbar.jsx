@@ -14,7 +14,10 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="bg-blue-500 text-blue-200 w-full fixed bottom-0 left-0 right-0 md:relative">
+    <nav className="bg-blue-500 text-blue-200 w-full fixed bottom-0 left-0 right-0 md:relative"
+    style={{
+      zIndex: 2
+    }}>
       <div className="max-w-screen-xl mx-auto">
         <ul className="flex items-center justify-between md:justify-start">
           {navItems.map((item) => (

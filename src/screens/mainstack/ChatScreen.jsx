@@ -45,8 +45,18 @@ const ChatScreen = () => {
   
   return (
     <>
-      <div className="font-bold text-3xl ml-[4%] mt-[1%]">Your Matches</div>
-      <div className="ml-[7%] mt-[1%]">
+      <div className="font-bold ml-[4%] mt-[1%]"
+      style={{
+      fontSize: '16px'
+      }}
+      >
+        Your Matches
+        </div>
+      <div className="ml-[7%] mt-[1%]"
+      style={{
+        fontSize: '14px',
+        fontWeight: 'normal'
+      }}>
         {matches?.map((item, index) => (
           <UserChat key={index} userId={userId} item={item} />
         ))}

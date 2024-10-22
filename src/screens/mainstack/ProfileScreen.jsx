@@ -753,9 +753,17 @@ const freeMessages = 20;
     <div style={{
       maxWidth: "600px",
       margin: "0 auto",
-      padding: "10px",
+      paddingBottom: "70px",
       fontFamily: "Arial, sans-serif",
     }}>
+      <div
+      style={{
+        maxWidth: "600px",
+        margin: "0 auto",
+        padding: "10px",
+        fontFamily: "Arial, sans-serif",
+      }}
+      >
       <div style={{
         position: "relative",
       }}>
@@ -1085,6 +1093,7 @@ const freeMessages = 20;
         >
           Logout
         </button>
+      </div>
       </div>
     </div>
   )

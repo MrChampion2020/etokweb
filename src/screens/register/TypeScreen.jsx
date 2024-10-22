@@ -28,16 +28,27 @@ const TypeScreen = () => {
   return (
     <>
       <RegistrationTop logo={PiNotebookBold} title="What's your sexuality?" />
-      <div className="text-[20px] ml-[10%] font-semibold text-gray-500">
+      <div className="text-[16px] font-semibold text-gray-500"
+      style={{
+        padding: 20
+      }}
+      >
         Users are matched based on the sexuality available below. You can add
         more about your sexuality afterwards.
       </div>
-      <div className="flex flex-col justify-center w-[80%] ml-[10%] mt-[3%]">
+      <div className="flex flex-col justify-center"
+      style={{
+        width: '80%',
+        margin: '3% auto'
+      }}>
         <div
-          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] border-t-2 border-gray-400"
+          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] "
+          style={{
+            borderBottom: '0.3px solid grey'
+          }}
           onClick={() => setType("Straight")}
         >
-          <div className="pl-[20px] text-lg font-bold">Straight</div>
+          <div className="pl-[16px] text-lg font-bold">Straight</div>
           {type === "Straight" ? (
             <FaRegCheckCircle className="text-[20px] mr-[10px]" />
           ) : (
@@ -45,7 +56,10 @@ const TypeScreen = () => {
           )}
         </div>
         <div
-          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] border-t-2 border-gray-400"
+          className="flex flex-row justify-between items-center mt-[10px] pt-[10px]"
+          style={{
+            borderBottom: '0.3px solid grey'
+          }}
           onClick={() => setType("Gay")}
         >
           <div className="pl-[20px] text-lg font-bold">Gay</div>
@@ -56,7 +70,10 @@ const TypeScreen = () => {
           )}
         </div>
         <div
-          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] border-t-2 border-gray-400"
+          className="flex flex-row justify-between items-center mt-[10px] pt-[10px]"
+          style={{
+            borderBottom: '0.3px solid grey'
+          }}
           onClick={() => setType("Lesbian")}
         >
           <div className="pl-[20px] text-lg font-bold">Lesbian</div>
@@ -67,8 +84,11 @@ const TypeScreen = () => {
           )}
         </div>
         <div
-          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] border-t-2 border-b-2 border-gray-400 pb-[10px]"
-          onClick={() => setType("Bisexual")}
+          className="flex flex-row justify-between items-center mt-[10px] pt-[10px] pb-[10px]"
+
+          style={{
+            borderBottom: '0.3px solid grey'
+          }}          onClick={() => setType("Bisexual")}
         >
           <div className="pl-[20px] text-lg font-bold">Bisexual</div>
           {type === "Bisexual" ? (
@@ -78,11 +98,30 @@ const TypeScreen = () => {
           )}
         </div>
       </div>
-      <div className="mt-[3%] ml-[71.5%]">
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "2rem",
+          boxSizing: "border-box",
+        }}
+      >
         <button
+        className="bg-blue-500"
           onClick={handleNext}
-          className="bg-blue-500 h-12 w-60 border-none rounded-full justify-center items-center self-center mt-5 text-white text-lg font-bold font-sans"
+          style={{
+            color: "white",
+            border: "none",
+            width: '50%',
+            padding: "10px 5px",
+            fontSize: "18px",
+            borderRadius: "30px",
+            cursor: "pointer",
+          }}
         >
+                
           Next
         </button>
       </div>
@@ -91,3 +130,4 @@ const TypeScreen = () => {
 };
 
 export default TypeScreen;
+

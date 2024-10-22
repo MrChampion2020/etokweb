@@ -277,92 +277,121 @@
 // export default HomeScreen;
 
 
-import React, { useEffect, useState } from "react"
-import { jwtDecode } from "jwt-decode"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
-import { IoSparkles } from "react-icons/io5"
-import { FaHeart } from "react-icons/fa"
-import { ImCross } from "react-icons/im"
-import API_URL from "../../config"
 
 
-export default function HomeScreen() {
-  const navigate = useNavigate()
-  const [option, setOption] = useState("Compatible")
-  const [profilesData, setProfilesData] = useState([])
-  const [userId, setUserId] = useState("")
-  const [currentProfileIndex, setCurrentProfileIndex] = useState(0)
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { IoSparkles } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
+import {useSwipeable} from 'react-swipeable';
+import API_URL from "../../config";
+
+const HomeScreen = () => {
+  const navigation = useNavigate();
+  const [option, setOption] = useState("Compatible");
+  const [profilesData, setProfilesData] = useState([]);
+  const [userId, setUserId] = useState("");
+  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       if (token) {
-        const decodedToken = jwtDecode(token)
-        setUserId(decodedToken.userId)
+        const decodedToken = jwtDecode(token);
+        setUserId(decodedToken.userId);
       }
-    }
-
-    fetchUser()
-  }, [])
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (userId) {
-      fetchMatches()
+      fetchMatches();
     }
-  }, [userId])
+  }, [userId]);
 
   const fetchMatches = async () => {
     try {
-      const response = await axios.get(`${API_URL}/matches?userId=${userId}`)
-      setProfilesData(response.data.matches)
+      const response = await axios.get(`${API_URL}/matches?userId=${userId}`);
+      setProfilesData(response.data.matches);
     } catch (error) {
-      console.error("Error fetching matches:", error)
+      console.error("Error fetching matches:", error);
     }
-  }
+  };
 
-  const currentProfile = profilesData[currentProfileIndex]
+  const currentProfile = profilesData[currentProfileIndex];
 
   const navigateToNextProfile = () => {
-    const nextIndex = currentProfileIndex + 1
+    const nextIndex = currentProfileIndex + 1;
     if (nextIndex < profilesData.length) {
-      setCurrentProfileIndex(nextIndex)
+      setCurrentProfileIndex(nextIndex);
+      setCurrentImageIndex(0);
     } else {
-      console.log("No more profiles")
-      alert("No more profiles")
+      alert("No more profiles");
     }
-  }
+  };
 
-  const handleLike = (imageIndex) => {
-    navigate("/user/send-like", {
+  const handleLike = () => {
+    navigation("/user/send-like", {
       state: {
-        image: currentProfile?.imageUrls[imageIndex],
+        image: currentProfile?.imageUrls[currentImageIndex],
         name: currentProfile?.firstName,
         userId: userId,
         likedUserId: currentProfile?._id,
       },
-    })
-  }
+    });
+  };
 
-  const age = currentProfile?.dateOfBirth
-    ? 2024 - parseInt(currentProfile.dateOfBirth.split("/")[2])
-    : null
+  const handleSwipe = (dir) => {
+    if (dir === "left") {
+      const nextIndex = currentImageIndex + 1;
+      if (nextIndex < currentProfile.imageUrls.length) {
+        setCurrentImageIndex(nextIndex);
+      }
+    } else if (dir === "right") {
+      const prevIndex = currentImageIndex - 1;
+      if (prevIndex >= 0) {
+        setCurrentImageIndex(prevIndex);
+      }
+    }
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center">
+    <div
+      style={{
+        padding: "60px 20px",
+        maxWidth: "1200px",
+        margin: "0 auto",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ padding: "10px", backgroundColor: "#e0e0e0", borderRadius: "50%" }}>
           <IoSparkles />
         </div>
-        {["Compatible", "Active Today", "New Here"].map((opt) => (
+        {[ "Compatible", "Active Today", "New Here"].map((opt) => (
           <button
             key={opt}
-            className={`px-4 py-2 rounded-full ${
-              option === opt
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground"
-            }`}
             onClick={() => setOption(opt)}
+            style={{
+              padding: "10px 15px",
+              borderRadius: "9999px",
+              border: "none",
+              backgroundColor: option === opt ? "#3B82F6" : "#e0e0e0",
+              color: option === opt ? "white" : "black",
+              cursor: "pointer",
+            }}
           >
             {opt}
           </button>
@@ -370,57 +399,156 @@ export default function HomeScreen() {
       </div>
 
       {currentProfile && (
-        <div className="bg-background shadow-lg rounded-lg overflow-hidden mb-6">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">{`${currentProfile.firstName} ${currentProfile.lastName}`}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {currentProfile.imageUrls?.slice(0, 6).map((url, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={url}
-                    alt={`${currentProfile.firstName}'s photo`}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <button
-                    className="absolute bottom-2 right-2 bg-secondary text-secondary-foreground p-2 rounded-full"
-                    onClick={() => handleLike(index)}
-                  >
-                    <FaHeart className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p><strong>Age:</strong> {age}</p>
-                <p><strong>Gender:</strong> {currentProfile.gender}</p>
-                <p><strong>Sexuality:</strong> {currentProfile.type}</p>
-              </div>
-              <div>
-                <p><strong>Hometown:</strong> {currentProfile.homeTown}</p>
-                <p><strong>Looking for:</strong> {currentProfile.lookingFor}</p>
-              </div>
-            </div>
-            <div className="mt-6">
-              {currentProfile.prompts?.slice(0, 3).map((prompt) => (
-                <div key={prompt.id} className="mb-4 p-4 bg-muted rounded-lg">
-                  <p className="font-semibold">{prompt.question}</p>
-                  <p className="text-lg">{prompt.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="flex justify-center">
-        <button
-          className="p-4 bg-secondary text-secondary-foreground rounded-full"
-          onClick={navigateToNextProfile}
+        <useSwipeable
+          onSwipedLeft={() => handleSwipe("left")}
+          onSwipedRight={() => handleSwipe("right")}
         >
-          <ImCross className="h-4 w-4" />
-        </button>
-      </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              {currentProfile.firstName} {currentProfile.lastName}
+            </h2>
+            <div>
+              <img
+                src={currentProfile.imageUrls[currentImageIndex]}
+                alt={`${currentProfile.firstName}'s photo`}
+                style={{
+                  width: "300px",
+                  height: "400px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "300px",
+              }}
+            >
+                            <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "300px",
+                }}
+              >
+                <button
+                  onClick={() => handleSwipe("right")}
+                  style={{
+                    backgroundColor: "#e0e0e0",
+                    borderRadius: "50%",
+                    padding: "10px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <IoArrowBack />
+                </button>
+                <button
+                  onClick={handleLike}
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    right: "10px",
+                    backgroundColor: "rgba(255, 255, 255, 0.7)",
+                    borderRadius: "50%",
+                    padding: "10px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <FaHeart style={{ color: "#f44336" }} />
+                </button>
+                <button
+                  onClick={() => handleSwipe("left")}
+                  style={{
+                    backgroundColor: "#e0e0e0",
+                    borderRadius: "50%",
+                    padding: "10px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <IoArrowForward />
+                </button>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              <div>
+                <p>
+                  <strong>Age:</strong> {2024 - parseInt(currentProfile.dateOfBirth.split('/')[2])}
+                </p>
+                <p>
+                  <strong>Gender:</strong> {currentProfile.gender}
+                </p>
+                <p>
+                  <strong>Sexuality:</strong> {currentProfile.type}
+                </p>
+              </div>
+              <div>
+                <p>
+                  <strong>Hometown:</strong> {currentProfile.homeTown}
+                </p>
+                <p>
+                  <strong>Looking for:</strong> {currentProfile.lookingFor}
+                </p>
+              </div>
+            </div>
+            <div style={{ marginTop: "20px" }}>
+              {currentProfile.prompts?.slice(0, 3).map((prompt) => (
+                <div
+                  key={prompt.id}
+                  style={{
+                    backgroundColor: "#f0f0f0",
+                    padding: "15px",
+                    borderRadius: "8px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <p style={{ fontWeight: "bold" }}>{prompt.question}</p>
+                  <p>{prompt.answer}</p>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={navigateToNextProfile}
+              style={{
+                position: "fixed",
+                left: "20px",
+                bottom: "20px",
+                padding: "15px",
+                backgroundColor: "#e0e0e0",
+                borderRadius: "50%",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <ImCross />
+            </button>
+          </div>
+        </useSwipeable>
+      )}
     </div>
-  )
-}
+  );
+};
+
+export default HomeScreen;

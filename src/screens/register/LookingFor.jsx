@@ -112,11 +112,30 @@ const LookingFor = () => {
           )}
         </div>
       </div>
-      <div className="mt-[3%] ml-[71.5%]">
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "2rem",
+          boxSizing: "border-box",
+        }}
+      >
         <button
+        className="bg-blue-500"
           onClick={handleNext}
-          className="bg-blue-500 h-12 w-60 border-none rounded-full justify-center items-center self-center mt-5 text-white text-lg font-bold font-sans"
+          style={{
+            color: "white",
+            border: "none",
+            width: '50%',
+            padding: "10px 5px",
+            fontSize: "18px",
+            borderRadius: "30px",
+            cursor: "pointer",
+          }}
         >
+                
           Next
         </button>
       </div>

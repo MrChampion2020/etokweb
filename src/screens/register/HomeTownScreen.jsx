@@ -27,7 +27,10 @@ const HomeTownScreen = () => {
   return (
     <div>
       <RegistrationTop logo={MdOutlineHome} title="What's your hometown?" />
-      <div className="mt-6 ml-52 w-[40%] flex flex-col justify-center items-center">
+      <div className="mt-6 w-[80%] flex flex-col justify-center items-center"
+      style={{
+        padding: 20
+      }}>
         <input
           type="text"
           name="homeTown"
@@ -39,11 +42,30 @@ const HomeTownScreen = () => {
           placeholder="HomeTown"
         />
       </div>
-      <div className="mt-[3%] ml-[60%]">
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "2rem",
+          boxSizing: "border-box",
+        }}
+      >
         <button
-          className="bg-blue-500 h-12 w-60 border-none rounded-full justify-center items-center self-center mt-5 text-white text-lg font-bold font-sans"
+        className="bg-blue-500"
           onClick={handleNext}
+          style={{
+            color: "white",
+            border: "none",
+            width: '50%',
+            padding: "10px 5px",
+            fontSize: "18px",
+            borderRadius: "30px",
+            cursor: "pointer",
+          }}
         >
+                
           Next
         </button>
       </div>
@@ -52,3 +74,4 @@ const HomeTownScreen = () => {
 };
 
 export default HomeTownScreen;
+

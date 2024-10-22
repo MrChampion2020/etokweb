@@ -77,13 +77,27 @@ const LocationScreen = () => {
         logo={MdOutlineEditLocationAlt}
         title="Enter Your Location"
       />
-      <div className="mt-6 ml-52 flex flex-col gap-3">
-        <div className="flex flex-row">
-          <div className="w-[40%] flex flex-col justify-center items-center">
+      <div className="mt-6"
+      style={{
+        width: '80%',
+        margin: 'auto',
+  
+      
+      }}>
+        <div style={{
+          width: '100%',
+          margin: 'auto',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div className="w-[80%] flex flex-col justify-center items-center"
+          style={{
+            margin: 'auto'
+          }}>
             <input
               type="text"
               name="country"
-              className="w-full text-sm p-2 mt-5 border-b-2 border-b-black focus:outline-none"
+              className="w-full text-sm p-2 mt-5 border-b-1 border-b-black focus:outline-none"
               id="country"
               autoFocus={true}
               value={country}
@@ -93,14 +107,19 @@ const LocationScreen = () => {
             <input
               type="text"
               name="city"
-              className="w-full text-sm p-2 mt-5 border-b-2 border-b-black focus:outline-none"
+              className="w-full text-sm p-2 mt-5 border-b-1 border-b-black focus:outline-none"
               id="city"
               value={city}
               onChange={(e) => handleCityChange(e.target.value)}
               placeholder="Enter city name"
             />
           </div>
-          <div className=" mt-[4%] ml-[15%] ">
+
+
+          <div className="  mt-[3%] "
+          style={{
+            margin: 'auto'
+          }}>
             <button
               onClick={handleNext}
               className="bg-blue-500 h-12 w-60 border-none rounded-full justify-center items-center self-center mt-5 text-white text-lg font-bold font-sans"
@@ -108,12 +127,14 @@ const LocationScreen = () => {
               Next
             </button>
           </div>
+          
         </div>
+
         <div style={{ marginTop: 10 }}>
           <MapContainer
             center={markerLocation}
             zoom={5}
-            style={{ height: "300px", width: "80%" }}
+            style={{ height: "300px", width: "90%", margin: 'auto' }}
           >
             <ChangeView center={markerLocation} zoom={5} />
             <TileLayer
@@ -133,3 +154,6 @@ const LocationScreen = () => {
 };
 
 export default LocationScreen;
+
+
+
