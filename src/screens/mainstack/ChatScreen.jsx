@@ -47,7 +47,8 @@ const ChatScreen = () => {
     <>
       <div className="font-bold ml-[4%] mt-[1%]"
       style={{
-      fontSize: '16px'
+      fontSize: '16px',
+      padding: 10
       }}
       >
         Your Matches

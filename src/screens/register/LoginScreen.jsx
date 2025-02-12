@@ -168,6 +168,8 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { token, isLoading, setToken } = useContext(AuthContext);
+  const [isProcessing, setIsProcessing] = useState(false); // For showing the processing effect
+
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -178,6 +180,7 @@ const LoginScreen = () => {
 
   const signInUser = async () => {
     setOption("Sign In");
+    setIsProcessing(true); // Start processing
     try {
       console.log(email);
       console.log(password);
@@ -199,6 +202,8 @@ const LoginScreen = () => {
       // navigation.replace('Main');
     } catch (error) {
       console.log("error", error);
+    } finally{
+      setIsProcessing(false); // Stop processing after the response
     }
   };
 
@@ -292,15 +297,17 @@ const LoginScreen = () => {
             Create account
           </button>
           <button
-            className={`w-full py-3 rounded-full text-lg font-bold ${
-              option === "Sign In"
-                ? "bg-[#318ce7] text-white"
-                : "bg-transparent text-black border border-black"
-            }`}
-            onClick={signInUser}
-          >
-            Sign In
-          </button>
+  className={`w-full py-3 rounded-full text-lg font-bold ${
+    option === "Sign In"
+      ? "bg-[#318ce7] text-white"
+      : "bg-transparent text-black border border-black"
+  } ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`} // Disable styling when processing
+  onClick={signInUser}
+  disabled={isProcessing} // Disable the button while processing
+>
+  {isProcessing ? "Processing..." : "Sign In"} {/* Show processing text */}
+</button>
+
         </div>
       </div>
     </div>

@@ -85,7 +85,10 @@ const ChatRoom = () => {
               navigation(-1);
             }}
           />
-          <div className="text-3xl font-semibold">{location?.state?.name}</div>
+          <div className="font-semibold"
+          style={{
+            fontSize: '16px'
+          }}>{location?.state?.name}</div>
         </div>
         <div className="flex flex-row items-center justify-center text-lg font-semibold gap-3 ">
           <FaVideo /> <IoCall />

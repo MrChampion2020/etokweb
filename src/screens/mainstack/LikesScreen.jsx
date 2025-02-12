@@ -183,8 +183,8 @@ const LikesScreen = () => {
     >
       <div
         style={{
-          fontSize: "14px",
-          fontWeight: "light",
+          fontSize: "16px",
+          fontWeight: "bold",
           textAlign: 'center',
           marginBottom: "1rem",
         }}

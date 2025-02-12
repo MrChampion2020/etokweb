@@ -43,9 +43,9 @@ const SendLikeScreen = () => {
       margin: '0 auto',
     }}>
       <h1 style={{
-        fontSize: '2rem',
+        fontSize: '16px',
         fontWeight: 'bold',
-        marginBottom: '20px',
+        padding: 20,
       }}>
         {location?.state?.name}
       </h1>

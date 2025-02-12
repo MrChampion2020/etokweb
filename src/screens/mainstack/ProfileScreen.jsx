@@ -673,7 +673,11 @@ import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 import API_URL from "../../config"
-import { FaCamera, FaCog, FaCheckCircle, FaGem, FaWallet, FaAngleRight } from "react-icons/fa"
+import { 
+  FaCamera, FaCog, FaCheckCircle, FaWallet, FaGem, FaAngleRight, 
+  FaVideo, FaMicrophone, FaUsers, FaMedal, FaEdit, FaHome, 
+  FaCommentDots, FaUserTie, FaInfoCircle 
+} from 'react-icons/fa';
 
 export default function ProfileScreen() {
   const navigation = useNavigate()
@@ -724,6 +728,54 @@ const following = 50;
 const freeMessages = 20;
 
 
+ //const VideoCallToggle 
+ const [isVideoCallEnabled, setIsVideoCallEnabled] = useState(true);
+  
+ const handlePress = () => {
+   setIsVideoCallEnabled(!isVideoCallEnabled);
+ };
+
+ const [showOptions, setShowOptions] = useState(false);
+const [selectedOption, setSelectedOption] = useState(null);
+const options = [
+ { label: '$0.5', value: 0.5 },
+ { label: '$1', value: 1 },
+ { label: '$1.5', value: 5 },
+];
+
+const handleOptionsPress = () => {
+ setShowOptions(!showOptions);
+};
+
+const handleSelectOption = (option) => {
+ setSelectedOption(option);
+ setShowOptions(false);
+};
+
+
+//const VideoCallToggle 
+const [isAudioCallEnabled, setIsAudioCallEnabled] = useState(true);
+
+const handlePressAudio = () => {
+ setIsAudioCallEnabled(!isAudioCallEnabled);
+};
+const [showAudioOptions, setShowAudioOptions] = useState(false);
+const [selectedAudioOption, setSelectedAudioOption] = useState(null);
+const optionsAudio = [
+{ label: '$0.5', value: 0.5 },
+{ label: '$1', value: 1 },
+{ label: '$1.5', value: 5 },
+];
+
+const handleOptionsPressAudio = () => {
+setShowAudioOptions(!showAudioOptions);
+};
+
+const handleSelectAudioOption = (optionAudio) => {
+setSelectedAudioOption(optionAudio);
+setShowAudioOptions(false);
+};
+
   const logout = () => {
     try {
       localStorage.removeItem("token")
@@ -739,6 +791,10 @@ const freeMessages = 20;
     navigation("/user/Edit", { state: { currentProfile } })
   }
 
+  const navigateToCreatePost = () => {
+    navigation("/user/createPost", { state: { currentProfile } })
+  }
+
   const handleImageUpload = (event) => {
     console.log("Image uploaded:", event.target.files[0])
   }
@@ -750,351 +806,524 @@ const freeMessages = 20;
   }
 
   return (
-    <div style={{
-      maxWidth: "600px",
-      margin: "0 auto",
-      paddingBottom: "70px",
-      fontFamily: "Arial, sans-serif",
-    }}>
-      <div
-      style={{
-        maxWidth: "600px",
-        margin: "0 auto",
-        padding: "10px",
-        fontFamily: "Arial, sans-serif",
-      }}
-      >
-      <div style={{
-        position: "relative",
-      }}>
-        <div style={{
-          height: "150px",
-          backgroundImage: `url(${currentProfile?.imageUrls?.[0] || "blue"})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          borderRadius: "10px 10px 0 0",
-          opacity: 0.2
-        }}></div>
-        <div style={{
-          position: "absolute",
-          bottom: "-50px",
-          left: "20px",
-        }}>
-          <div style={{
-            position: "relative",
-            width: "100px",
-            height: "100px",
-          }}>
-            <img
-              src={currentProfile?.imageUrls?.[0] || "https://via.placeholder.com/150"}
-              alt="Profile"
+    <div style={{ maxWidth: "600px", margin: "0 auto", paddingBottom: "70px", fontFamily: "Arial, sans-serif" }}>
+      <div style={{ padding: "10px" }}>
+        {/* Header Section */}
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              height: "150px",
+              backgroundImage: `url(${currentProfile?.imageUrls?.[0] || "blue"})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              borderRadius: "10px 10px 0 0",
+              opacity: 0.2,
+            }}
+          ></div>
+          <div style={{ position: "absolute", bottom: "-50px", left: "20px" }}>
+            <div style={{ position: "relative", width: "100px", height: "100px" }}>
+              <img
+                src={currentProfile?.imageUrls?.[0] || "https://via.placeholder.com/150"}
+                alt="Profile"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  borderRadius: "50%",
+                  border: "4px solid white",
+                  objectFit: "cover",
+                }}
+              />
+              <label
+                htmlFor="imageUpload"
+                style={{
+                  position: "absolute",
+                  bottom: "0",
+                  right: "0",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                <FaCamera style={{ width: "16px", height: "16px" }} />
+              </label>
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
+            </div>
+          </div>
+          <button
+            onClick={navigateToEdit}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              backgroundColor: "white",
+              border: "none",
+              borderRadius: "50%",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <FaCog style={{ width: "20px", height: "20px", color: "#007bff" }} />
+          </button>
+        </div>
+
+        {/* User Info Section */}
+        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+          <h2
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+              marginTop: "30px",
+              padding: "20px",
+            }}
+          >
+            {currentProfile?.firstName} {currentProfile?.lastName}
+            <FaCheckCircle style={{ color: "#007bff", width: "20px", height: "20px" }} />
+          </h2>
+          <p style={{ color: "#666" }}>
+            {age} years old • {currentProfile?.gender}
+          </p>
+        </div>
+
+        {/* Stats Section */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+            flexWrap: "wrap",
+            gap: "20px",
+          }}
+        >
+          <button
+            style={{
+              backgroundColor: "white",
+              borderRadius: "10px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+              textAlign: "center",
+              flex: 1,
+              margin: "0 5px",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <p style={{ fontSize: "16px", fontWeight: "bold" }}>{followers}</p>
+            <p style={{ fontSize: "14px", color: "blue" }}>Followers</p>
+          </button>
+
+          <button
+            style={{
+              backgroundColor: "white",
+              borderRadius: "10px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+              textAlign: "center",
+              flex: 1,
+              margin: "0 5px",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <p style={{ fontSize: "16px", fontWeight: "bold" }}>{following}</p>
+            <p style={{ fontSize: "14px", color: "blue" }}>Following</p>
+          </button>
+
+          <button
+            style={{
+              backgroundColor: "white",
+              borderRadius: "10px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+              textAlign: "center",
+              flex: 1,
+              margin: "0 5px",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <p style={{ fontSize: "16px", fontWeight: "bold" }}>{freeMessages}</p>
+            <p style={{ fontSize: "14px", color: "blue" }}>Messages</p>
+          </button>
+        </div>
+
+        {/* Coin and Wallet Section */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            marginBottom: "20px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.09)",
+            borderRadius: "10px",
+            width: "98%",
+            margin: "auto",
+          }}
+        >
+          {/* Coins */}
+          <div
+            style={{
+              backgroundColor: "white",
+              color: "#007bff",
+              borderRadius: "5px",
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FaWallet style={{ marginRight: "10px" }} />
+              <span>Coins</span>
+            </div>
+            <button
               style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                border: "4px solid white",
-                objectFit: "cover",
-              }}
-            />
-            <label
-              htmlFor="imageUpload"
-              style={{
-                position: "absolute",
-                bottom: "0",
-                right: "0",
                 backgroundColor: "#007bff",
                 color: "white",
-                borderRadius: "50%",
-                padding: "5px",
+                border: "1px solid #007bff",
+                borderRadius: "30px",
+                padding: "5px 10px",
+                fontSize: "12px",
                 cursor: "pointer",
               }}
             >
-              <FaCamera style={{ width: "16px", height: "16px" }} />
-            </label>
-            <input
-              type="file"
-              id="imageUpload"
-              accept="image/*"
-              onChange={handleImageUpload}
-              style={{ display: "none" }}
-            />
+              Recharge
+            </button>
+          </div>
+
+          {/* Wallet */}
+          <div
+            style={{
+              backgroundColor: "white",
+              color: "#007bff",
+              borderRadius: "5px",
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FaGem style={{ marginRight: "10px" }} />
+              <span>Wallet</span>
+            </div>
+            <button
+              style={{
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "1px solid #007bff",
+                borderRadius: "30px",
+                padding: "5px 10px",
+                fontSize: "12px",
+                cursor: "pointer",
+              }}
+            >
+              Withdraw
+            </button>
+          </div>
+
+          {/* Bill Details */}
+          <div
+            style={{
+              backgroundColor: "white",
+              color: "#007bff",
+              borderRadius: "5px",
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span>Bill Details</span>
+            </div>
+            <FaAngleRight style={{ color: "grey", fontSize: "12px" }} />
           </div>
         </div>
-        <button
-          onClick={navigateToEdit}
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            backgroundColor: "white",
-            border: "none",
-            borderRadius: "50%",
-            padding: "10px",
-            cursor: "pointer",
-          }}
-        >
-          <FaCog style={{ width: "20px", height: "20px", color: "#007bff" }} />
-        </button>
-      </div>
 
-      <div style={{
-        textAlign: "center",
-        marginBottom: "20px",
-      }}>
-        <h2 style={{
-          fontSize: "24px",
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "10px",
-          marginTop: "30px",
-          padding: "20px",
-        }}>
-          {currentProfile?.firstName} {currentProfile?.lastName}
-          <FaCheckCircle style={{ color: "#007bff", width: "20px", height: "20px" }} />
-        </h2>
-        <p style={{ color: "#666" }}>
-          {age} years old • {currentProfile?.gender}
-        </p>
-      </div>
-
-      <div style={{
-  display: "flex",
-  justifyContent: "space-between",
-  marginBottom: "20px",
-  flexWrap: "wrap",
-  gap: 20
-}}>
-  <button style={{
-    backgroundColor: "white",
-    borderRadius: "10px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
-    textAlign: "center",
-    flex: 1,
-    margin: "0 5px",
-    padding: "10px",
-    cursor: "pointer",
-  }}>
-    <p style={{ fontSize: "20px", fontWeight: "bold" }}>{followers}</p>
-    <p style={{ fontSize: "14px", color: "blue" }}>Followers</p>
-  </button>
-  
-  <button style={{
-    backgroundColor: "white",
-    borderRadius: "10px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
-    textAlign: "center",
-    flex: 1,
-    margin: "0 5px",
-    padding: "10px",
-    cursor: "pointer",
-  }}>
-    <p style={{ fontSize: "20px", fontWeight: "bold" }}>{following}</p>
-    <p style={{ fontSize: "14px", color: "blue" }}>Following</p>
-  </button>
-  
-  <button style={{
-    backgroundColor: "white",
-    borderRadius: "10px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
-    textAlign: "center",
-    flex: 1,
-    margin: "0 5px",
-    padding: "10px",
-    cursor: "pointer",
-  }}>
-    <p style={{ fontSize: "20px", fontWeight: "bold" }}>{freeMessages}</p>
-    <p style={{ fontSize: "14px", color: "blue" }}>Free Messages</p>
-  </button>
-</div>
-
-      <div style={{
-  display: "flex",
-  flexDirection: 'column',
-  gap: "10px",
-  marginBottom: "20px",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.09)",
-  borderRadius: "10px",
-  width: '98%',
-  margin: 'auto'
-}}>
- <div
- style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row'
-}}
- >
-<button 
-  style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row',
-  width: '80%'
-}}>
-    <FaWallet style={{ marginRight: "10px" }} />
-    Coins
-  </button>
-
-<button
- style={{
-  backgroundColor: "#007bff",
-  color: "white",
-  border: "1px solid #007bff",
-  borderRadius: "30px",
-  padding: "5px",
-  display: "flex",
-  fontSize: '12px'
- 
-  
-
-}}>Recharge</button>
- </div>
-  
-
-
-  
- <div
- style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row'
-}}
- >
-<button 
-  style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row',
-  width: '80%'
-}}>
-   <FaGem style={{ marginRight: "10px" }} />
-   Wallet
-  </button>
-
-<button
- style={{
-  backgroundColor: "#007bff",
-  color: "white",
-  border: "1px solid #007bff",
-  borderRadius: "30px",
-  padding: "5px",
-  display: "flex",
-  fontSize: '12px'
- 
-  
-
-}}>Withdraw</button>
- </div>
- 
-
-  {/* Bill Details*/}
- 
- <div
- style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row'
-}}
- >
-<button 
-  style={{
-  backgroundColor: "white",
-  color: "#007bff",
-  borderRadius: "5px",
-  padding: "10px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  cursor: "pointer",
-  flexDirection: 'row',
-  width: '80%'
-}}>
-   Bill Details
-  </button>
-
-<button
- style={{
-  backgroundColor: "white",
-  color: "black",
-  fontSize: '20px',
-  fontWeight: 'lighter'
- 
-}}> <FaAngleRight style={{ marginRight: "10px"}} /></button>
- </div>
-
-  
-  
-</div>
-      <div style={{ marginBottom: "20px" }}>
-        <h3 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>About Me</h3>
-        <p>{currentProfile?.lookingFor}</p>
-      </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        {currentProfile?.prompts.slice(0, 3).map((prompt) => (
-          <div key={prompt.id} style={{
-            backgroundColor: "#f0f0f0",
-            padding: "15px",
-            borderRadius: "10px",
-            marginBottom: "10px",
-          }}>
-            <p style={{ fontWeight: "bold", marginBottom: "5px" }}>{prompt.question}</p>
-            <p>{prompt.answer}</p>
+        {/* Video and Audio Call Section */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", margin: "20px 0" }}>
+          {/* Video Call */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "0.2px solid #E0E0E0",
+              padding: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            <button
+              onClick={handlePress}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaVideo
+                style={{
+                  color: isVideoCallEnabled ? "#318ce7" : "lightgrey",
+                  fontSize: "30px",
+                }}
+              />
+            </button>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Video
+            </div>
+            <button
+              onClick={handleOptionsPress}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaAngleRight />
+            </button>
           </div>
-        ))}
-      </div>
 
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-      }}>
-        <button
-          onClick={logout}
+          {/* Audio Call */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "0.2px solid #E0E0E0",
+              padding: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            <button
+              onClick={handlePressAudio}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaMicrophone
+                style={{
+                  color: isAudioCallEnabled ? "#318ce7" : "lightgrey",
+                  fontSize: "30px",
+                }}
+              />
+            </button>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Audio
+            </div>
+            <button
+              onClick={handleOptionsPressAudio}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaAngleRight />
+            </button>
+          </div>
+        </div>
+
+        {/* Actions Section */}
+        <div
           style={{
-            backgroundColor: "#dc3545",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            padding: "10px 20px",
-            cursor: "pointer",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            margin: "20px 0",
+            gap: "20px",
           }}
         >
-          Logout
-        </button>
-      </div>
+
+
+
+          {/* Invite */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaUsers style={{ fontSize: "35px", color: "#848482" }} />
+            </button>
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Invite</h1>
+          </div>
+
+          {/* Rewards */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaMedal style={{ fontSize: "30px", color: "#9f8170" }} />
+            </button>
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Rewards</h1>
+          </div>
+
+          {/* Post */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <button
+              onClick={() =>
+                navigation(navigateToCreatePost, {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaEdit style={{ fontSize: "30px", color: "#ff91af" }} />
+            </button>
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Post</h1>
+          </div>
+
+          {/* Home */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaUserTie style={{ fontSize: "35px", color: "#318ce7" }} />
+            </button>
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Agents</h1>
+          </div>
+        </div>
+
+        {/* Secondary Actions Section */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            margin: "20px 0",
+            gap: "20px",
+          }}
+        >
+          {/* Feedback */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaCommentDots style={{ fontSize: "30px", color: "black" }} />
+            </button>
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Feedback</h1>
+          </div>
+
+          {/* Instructions */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            
+            <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaInfoCircle style={{ fontSize: "24px", color: "grey" }} />
+            </button>
+
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>Instructions</h1>
+          </div>
+
+
+
+           {/* About */}
+           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            
+            <button
+              onClick={() =>
+                navigation("/user/Edit", {
+                  currentProfile: currentProfile,
+                })
+              }
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaInfoCircle style={{ fontSize: "24px", color: "grey" }} />
+            </button>
+
+            <h1 style={{ fontSize: "14px", marginTop: "5px" }}>About</h1>
+          </div>
+
+
+          {/* Logout button */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            
+             <button
+            onClick={logout}
+            style={{
+              backgroundColor: "#dc3545",
+              color: "white",
+              border: "none",
+              borderRadius: "30px",
+              padding: 10,
+              cursor: "pointer",
+              fontSize: '14px'
+            }}
+          >
+            Logout
+          </button>
+            
+          </div>
+        </div>
+
+        {/* About Me Section 
+        <div style={{ marginBottom: "20px" }}>
+          <h3 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>
+            About Me
+          </h3>
+          <p>{currentProfile?.lookingFor}</p>
+        </div>
+
+       
+        <div style={{ marginBottom: "20px" }}>
+          {currentProfile?.prompts.slice(0, 3).map((prompt) => (
+            <div
+              key={prompt.id}
+              style={{
+                backgroundColor: "#f0f0f0",
+                padding: "15px",
+                borderRadius: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <p style={{ fontWeight: "bold", marginBottom: "5px" }}>{prompt.question}</p>
+              <p>{prompt.answer}</p>
+            </div>
+          ))}
+        </div>
+        */}
+
+
+        {/* Logout Button */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+         
+        </div>
       </div>
     </div>
-  )
+  );
+
 }

@@ -4,7 +4,7 @@ import { AuthContext } from "../../AuthContext";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import API_URL from "../../config"
+import API_URL from './config';
 
 const Edit = () => {
   const navigation = useNavigate();

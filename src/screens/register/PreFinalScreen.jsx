@@ -8,13 +8,13 @@ import {
 } from "../../registrationUtils";
 import { AuthContext } from "../../AuthContext";
 import axios from "axios";
-import API_URL from "../../config"
-
+import API_URL from "../../config";
 
 const PreFinalScreen = () => {
   const { token, setToken } = useContext(AuthContext);
   const navigation = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false); // For showing the processing effect
 
   useEffect(() => {
     if (token) {
@@ -84,11 +84,9 @@ const PreFinalScreen = () => {
   };
 
   const registerUser = async () => {
+    setIsProcessing(true); // Start processing
     try {
-      const response = await axios.post(
-        `${API_URL}/register`,
-        userData
-      );
+      const response = await axios.post(`${API_URL}/register`, userData);
       const token = response.data.token;
       localStorage.setItem("token", token);
       setToken(token);
@@ -97,6 +95,8 @@ const PreFinalScreen = () => {
     } catch (error) {
       console.error("Error registering user:", error);
       // Handle error here
+    } finally {
+      setIsProcessing(false); // Stop processing after the response
     }
   };
   const defaultOptions = {
@@ -123,11 +123,21 @@ const PreFinalScreen = () => {
           />
         </div>
         <div>
-          <button
+          {/* <button
             onClick={registerUser}
             className="bg-blue-500 h-12 w-64 border-none rounded-3xl justify-center items-center self-center mt-5 text-white text-xl font-bold font-sans"
           >
             Finish Registration
+          </button> */}
+          <button
+            className={`w-full py-3 rounded-full text-lg font-bold bg-[#318ce7] text-white ${
+              isProcessing ? "opacity-50 cursor-not-allowed" : ""
+            }`} // Disable styling when processing
+            onClick={registerUser}
+            disabled={isProcessing} // Disable the button while processing
+          >
+            {isProcessing ? "Processing..." : "Finish Registration"}{" "}
+            {/* Show processing text */}
           </button>
         </div>
       </div>

@@ -7,6 +7,18 @@ export { default as ProfileScreen } from './mainstack/ProfileScreen';
 export { default as Edit } from './mainstack/Edit';
 export { default as SendLikeScreen } from './mainstack/SendLikeScreen';
 export { default as ChatRoom } from './mainstack/ChatRoom';
+export { default as Recharge } from './mainstack/Recharge';
+export { default as Transfer } from './mainstack/Transfer';
+export { default as ViewPosts } from './mainstack/viewPosts';
+export { default as Withdraw } from './mainstack/Withdraw'; 
+export { default as CreatePost } from './mainstack/createPost'; 
+export { default as Call } from './mainstack/Call'; 
+
+
+
+//Exporting admin components
+export { default as AdminDashboard } from './mainstack/Admin';
+
 
 // Exporting regitser components
 export { default as BasicInfo } from './register/BasicInfo';
@@ -25,3 +37,5 @@ export { default as PromptsScreen } from './register/PromptsScreen';
 export { default as ShowPromptsScreen } from './register/ShowPromptsScreen';
 export { default as TypeScreen } from './register/TypeScreen';
 export { default as LoginScreen } from './register/LoginScreen';
+
+
